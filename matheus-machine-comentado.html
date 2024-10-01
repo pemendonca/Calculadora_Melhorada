@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Bases</title>
+    <style>
+        /* Estilo do corpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #354eb1;
+            margin: 0;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Contêiner principal */
+        #container {
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilo do título */
+        h1 {
+            font-size: 2.5em;
+            color: #009dff;
+            text-shadow: 0 0 10px rgba(0, 187, 255, 0.8);
+        }
+
+        /* Campos de entrada */
+        input[type="text"], select {
+            padding: 10px;
+            font-size: 1.2em;
+            width: 50%;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* Botão de conversão */
+        button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #009dff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Efeito hover no botão */
+        button:hover {
+            background-color: #009dff;
+        }
+
+        /* Saída dos resultados */
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            display: none; /* Inicialmente oculto */
+            font-size: 1.5em;
+            color: #fff; /* Cor do texto */
+        }
+
+        /* Estilo para os rótulos */
+        label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- contêiner principal -->
+    <div id="container">
+        <h1>Maquinazona de Conversão</h1>
+        <input id="inputValue" type="text" placeholder="Digite o valor">
+        <select id="inputBase">
+            <option value="decimal">Decimal</option>
+            <option value="hexadecimal">Hexadecimal</option>
+            <option value="octal">Octal</option>
+            <option value="binario">Binário</option>
+        </select>
+        <br><br>
+        <h3>Converter para:</h3>
+        <input type="checkbox" id="convertDecimal"><label for="convertDecimal">Decimal</label>
+        <input type="checkbox" id="convertHexadecimal"><label for="convertHexadecimal">Hexadecimal</label>
+        <input type="checkbox" id="convertOctal"><label for="convertOctal">Octal</label>
+        <input type="checkbox" id="convertBinario"><label for="convertBinario">Binário</label>
+        <br><br>
+        <button onclick="converter()">Converter</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function converter() {
+            var inputValue = document.getElementById('inputValue').value;
+            var inputBase = document.getElementById('inputBase').value;
+
+            if (!validarEntrada(inputValue, inputBase)) {
+                alert('Por favor, insira um número válido para a base selecionada.');
+                return;
+            }
+
+            var decimalValue = parseInt(inputValue, inputBase === 'hexadecimal' ? 16 : inputBase === 'octal' ? 8 : inputBase === 'binario' ? 2 : 10);
+            var outputHTML = '';
+
+            if (document.getElementById('convertDecimal').checked) {
+                outputHTML += `<p>Decimal: ${decimalValue}</p>`;
+            }
+            if (document.getElementById('convertHexadecimal').checked) {
+                outputHTML += `<p>Hexadecimal: ${decimalValue.toString(16).toUpperCase()}</p>`;
+            }
+            if (document.getElementById('convertOctal').checked) {
+                outputHTML += `<p>Octal: ${decimalValue.toString(8)}</p>`;
+            }
+            if (document.getElementById('convertBinario').checked) {
+                outputHTML += `<p>Binário: ${decimalValue.toString(2)}</p>`;
+            }
+
+            var output = document.getElementById('output');
+            output.innerHTML = outputHTML; // Atualiza o conteúdo
+            output.style.display = outputHTML ? 'block' : 'none'; // Exibe ou oculta a saída
+        }
+
+        function validarEntrada(inputValue, inputBase) {
+            var validChars = '';
+
+            if (inputBase === 'decimal') {
+                validChars = '0123456789';
+            } else if (inputBase === 'hexadecimal') {
+                validChars = '0123456789ABCDEFabcdef';
+            } else if (inputBase === 'octal') {
+                validChars = '01234567';
+            } else if (inputBase === 'binario') {
+                validChars = '01';
+            }
+
+            for (var i = 0; i < inputValue.length; i++) {
+                if (validChars.indexOf(inputValue[i]) === -1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>
